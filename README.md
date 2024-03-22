@@ -31,17 +31,27 @@ git clone https://github.com/edRibeiro/saperx-prova-dev-back-end
 cd <diretorio-do-projeto>
 ```
 
-3. Inicie os containers Docker:
+3. Instale as dependencias:
+```
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v "$(pwd):/var/www/html" \
+    -w /var/www/html \
+    laravelsail/php83-composer:latest \
+    composer install --ignore-platform-reqs
+```
+
+4. Inicie os containers Docker:
 ```
 ./vendor/bin/sail up -d
 
 ```
 
-4. Execute as migrações:
+5. Execute as migrações:
 
 ```./vendor/bin/sail artisan migrate```
 
-5. Popule o banco de dados com os produtos de celular:
+6. Popule o banco de dados com os produtos de celular:
 
 ```./vendor/bin/sail artisan db:seed --class=ProductSeeder```
 
