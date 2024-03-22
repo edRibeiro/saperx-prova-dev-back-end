@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Contact extends Model
+class Phone extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -16,17 +16,17 @@ class Contact extends Model
      *
      * @var string
      */
-    protected $table = 'contacts';
+    protected $table = 'phones';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'birth_date'];
+    protected $fillable = ['number', 'contact_id'];
 
-    public function phones(): HasMany
+    public function contact(): BelongsTo
     {
-        return $this->hasMany(Phone::class);
+        return $this->belongsTo(Contact::class);
     }
 }
