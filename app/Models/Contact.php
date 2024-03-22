@@ -29,4 +29,16 @@ class Contact extends Model
     {
         return $this->hasMany(Phone::class);
     }
+
+    public function addPhone(string $number)
+    {
+        $this->phones()->create(['number' => $number]);
+    }
+
+    public function addPhones(array $numbers)
+    {
+        foreach ($numbers as $number) {
+            $this->addPhone($number);
+        }
+    }
 }
