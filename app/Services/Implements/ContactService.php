@@ -4,6 +4,7 @@ namespace App\Services\Implements;
 
 use App\Models\Contact;
 use App\Services\ContactServiceInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -25,17 +26,19 @@ class ContactService implements ContactServiceInterface
   {
     return new Contact();
   }
+
   public function store(array $data): Contact
   {
     $contact = Contact::create(Arr::except($data, ['phones']));
     $contact->addPhones($data['phones']);
     return $contact->load('phones');
   }
+
   public function update(array $data, int $contactId): Contact
   {
     $contact = $this->model->find($contactId);
     if (!$contact) {
-      throw new NotFoundHttpException();
+      throw new ModelNotFoundException();
     }
     $contact->fill($data);
     if (array_key_exists('phones', $data)) {
@@ -44,6 +47,7 @@ class ContactService implements ContactServiceInterface
     }
     return $contact->load('phones');
   }
+
   public function delete(int $contactId): void
   {
   }

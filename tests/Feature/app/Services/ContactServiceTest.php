@@ -4,6 +4,7 @@ namespace Tests\Feature\App\Services;
 
 use App\Models\Contact;
 use App\Services\Implements\ContactService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
@@ -71,6 +72,7 @@ class ContactServiceTest extends TestCase
         $this->assertEquals($data['email'], $updatedContact->email);
         $this->assertEquals($data['birth_date'], $updatedContact->birth_date);
     }
+
     public function test_it_can_update_a_contact_with_phones()
     {
         // Arrange
@@ -85,11 +87,22 @@ class ContactServiceTest extends TestCase
         // Act
         $updatedContact = $this->contactService->update($data, $contact->id);
 
-
         // Assert
         $this->assertEquals($data['name'], $updatedContact->name);
         $this->assertEquals($data['email'], $updatedContact->email);
         $this->assertEquals($data['birth_date'], $updatedContact->birth_date);
         $this->assertEquals($data['phones'][0], $updatedContact->phones[0]->number);
+    }
+
+    public function test_it_can_update_throws_exception_when_contact_not_found()
+    {
+        // Arrange
+        $nonExistentContactId = 0;
+
+        // Expect
+        $this->expectException(ModelNotFoundException::class);
+
+        // Act
+        $this->contactService->update(['name' => 'John Doe'], $nonExistentContactId);
     }
 }
