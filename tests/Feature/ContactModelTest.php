@@ -9,6 +9,8 @@ use Tests\TestCase;
 
 class ContactModelTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_it_can_create_a_contact_without_phones()
     {
         // Arrange
