@@ -7,6 +7,7 @@ use App\Services\Implements\ContactService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Tests\TestCase;
 
@@ -125,5 +126,39 @@ class ContactServiceTest extends TestCase
 
         // Act
         $this->contactService->delete(9999); // ID que não existe no banco de dados
+    }
+
+    public function test_it_can_find_all_contacts()
+    {
+        Contact::factory()->count(10)->create();
+
+        // Act
+        $result = $this->contactService->findAll();
+
+        // Assert
+        $this->assertInstanceOf(LengthAwarePaginator::class, $result);
+        $this->assertTrue($result->count() == 10);
+    }
+
+    public function test_it_can_find_contact_by_id()
+    {
+        // Arrange
+        $contact = Contact::factory()->create();
+
+        // Act
+        $result = $this->contactService->findById($contact->id);
+
+        // Assert
+        $this->assertInstanceOf(Contact::class, $result);
+        $this->assertEquals($contact->id, $result->id);
+    }
+
+    public function test_it_can_find_contact_by_invalid_id_throws_exception()
+    {
+        // Expect
+        $this->expectException(ModelNotFoundException::class);
+
+        // Act
+        $this->contactService->findById(9999); // ID que não existe no banco de dados
     }
 }
