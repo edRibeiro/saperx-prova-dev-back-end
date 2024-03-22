@@ -19,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
             ContactServiceInterface::class,
             ContactService::class
         );
+        $this->app->register(\L5Swagger\L5SwaggerServiceProvider::class);
     }
 
     /**

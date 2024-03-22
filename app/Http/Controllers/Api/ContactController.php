@@ -21,8 +21,25 @@ class ContactController extends Controller
     {
         $this->service = $service;
     }
+
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/contacts",
+     *     summary="Retorna todos os contatos registrados",
+     *     tags={"Contacts"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Operação bem sucedida",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(ref="#/components/schemas/Contact")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erro interno do servidor"
+     *     )
+     * )
      */
     public function index()
     {
@@ -34,8 +51,44 @@ class ContactController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/contacts",
+     *     summary="Cria um novo contato",
+     *     tags={"Contacts"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Dados do contato",
+     *         @OA\JsonContent(
+     *             required={"name", "email", "birth_date", "phones"},
+     *             @OA\Property(property="name", type="string", example="John Doe"),
+     *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *             @OA\Property(property="birth_date", type="string", format="date", example="1990-01-01"),
+     *             @OA\Property(
+     *                 property="phones",
+     *                 type="array",
+     *                 @OA\Items(type="string", example="(99) 9999-9999")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Contato criado com sucesso",
+     *         @OA\JsonContent(ref="#/components/schemas/Contact")
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Entidade não processável",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="The email field is required.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erro interno do servidor"
+     *     )
+     * )
      */
+
     public function store(StoreContactRequest $request)
     {
         try {
@@ -46,8 +99,33 @@ class ContactController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/contacts/{id}",
+     *     summary="Retorna um contato específico pelo ID",
+     *     tags={"Contacts"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do contato",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Operação bem-sucedida",
+     *         @OA\JsonContent(ref="#/components/schemas/Contact")
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Contato não encontrado"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erro interno do servidor"
+     *     )
+     * )
      */
+
     public function show(int $id)
     {
         try {
@@ -58,7 +136,49 @@ class ContactController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/api/contacts/{id}",
+     *     summary="Atualiza um contato existente pelo ID",
+     *     tags={"Contacts"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do contato",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Dados do contato",
+     *         @OA\JsonContent(
+     *             required={"name", "email", "birth_date", "phones"},
+     *             @OA\Property(property="name", type="string", example="John Doe"),
+     *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *             @OA\Property(property="birth_date", type="string", format="date", example="1990-01-01"),
+     *             @OA\Property(
+     *                 property="phones",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="string",
+     *                     example="(99) 9999-9999"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Contato atualizado com sucesso",
+     *         @OA\JsonContent(ref="#/components/schemas/Contact")
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Contato não encontrado"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erro interno do servidor"
+     *     )
+     * )
      */
     public function update(UpdateContactRequest $request, int $id)
     {
@@ -70,7 +190,30 @@ class ContactController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/contacts/{id}",
+     *     summary="Exclui um contato existente pelo ID",
+     *     tags={"Contacts"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do contato a ser excluído",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Contato excluído com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Contato não encontrado"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erro interno do servidor"
+     *     )
+     * )
      */
     public function destroy(int $id)
     {
