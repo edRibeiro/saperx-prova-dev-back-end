@@ -2,7 +2,11 @@
 
 namespace App\Providers;
 
+use App\Services\ContactServiceInterface;
+use App\Services\Implements\ContactService;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -11,7 +15,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(
+            ContactServiceInterface::class,
+            ContactService::class
+        );
     }
 
     /**
@@ -19,6 +26,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Response::macro('error', function ($message, $code = HttpResponse::HTTP_BAD_REQUEST) {
+            return response()->json(['error' => $message], $code);
+        });
     }
 }
