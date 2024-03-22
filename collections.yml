@@ -1,0 +1,102 @@
+openapi: 3.0.0
+info:
+  title: API de Agenda Telefônica
+  description: Collection de requisições para a API de Agenda Telefônica
+  version: 1.0.0
+
+servers:
+  - url: http://exemplo.com/api
+
+paths:
+  /contacts:
+    post:
+      summary: Criar Contato
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Nome do Contato"
+                email:
+                  type: string
+                  example: "contato@example.com"
+                phone:
+                  type: string
+                  example: "(00) 0000-0000"
+                birth_date:
+                  type: string
+                  format: date
+                  example: "1990-01-01"
+      responses:
+        '201':
+          description: Contato criado com sucesso
+
+    get:
+      summary: Obter Todos os Contatos
+      responses:
+        '200':
+          description: Lista de todos os contatos
+
+  /contacts/{contact_id}:
+    get:
+      summary: Obter Contato por ID
+      parameters:
+        - name: contact_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID do contato a ser obtido
+      responses:
+        '200':
+          description: Contato obtido com sucesso
+
+    put:
+      summary: Atualizar Contato
+      parameters:
+        - name: contact_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID do contato a ser atualizado
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Novo Nome do Contato"
+                email:
+                  type: string
+                  example: "novo_contato@example.com"
+                phone:
+                  type: string
+                  example: "(99) 9999-9999"
+                birth_date:
+                  type: string
+                  format: date
+                  example: "1985-05-20"
+      responses:
+        '200':
+          description: Contato atualizado com sucesso
+
+    delete:
+      summary: Excluir Contato
+      parameters:
+        - name: contact_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID do contato a ser excluído
+      responses:
+        '204':
+          description: Contato excluído com sucesso
