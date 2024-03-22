@@ -52,4 +52,44 @@ class ContactServiceTest extends TestCase
         $this->assertCount(count($data['phones']), $contact->load('phones')->phones);
         $this->assertInstanceOf(Contact::class, $contact);
     }
+
+    public function test_it_can_update_a_contact_without_phones()
+    {
+        // Arrange
+        $contact = Contact::factory()->hasPhones(1)->create();
+        $data = [
+            'name' => 'John Doe',
+            'email' => 'john@example.com',
+            'birth_date' => '1990-01-01'
+        ];
+
+        // Act
+        $updatedContact = $this->contactService->update($data, $contact->id);
+
+        // Assert
+        $this->assertEquals($data['name'], $updatedContact->name);
+        $this->assertEquals($data['email'], $updatedContact->email);
+        $this->assertEquals($data['birth_date'], $updatedContact->birth_date);
+    }
+    public function test_it_can_update_a_contact_with_phones()
+    {
+        // Arrange
+        $contact = Contact::factory()->hasPhones(1)->create();
+        $data = [
+            'name' => 'John Doe',
+            'email' => 'john@example.com',
+            'birth_date' => '1990-01-01',
+            'phones' => ['22987654321']
+        ];
+
+        // Act
+        $updatedContact = $this->contactService->update($data, $contact->id);
+
+
+        // Assert
+        $this->assertEquals($data['name'], $updatedContact->name);
+        $this->assertEquals($data['email'], $updatedContact->email);
+        $this->assertEquals($data['birth_date'], $updatedContact->birth_date);
+        $this->assertEquals($data['phones'][0], $updatedContact->phones[0]->number);
+    }
 }
