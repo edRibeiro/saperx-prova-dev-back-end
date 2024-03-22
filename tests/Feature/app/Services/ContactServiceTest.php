@@ -19,7 +19,7 @@ class ContactServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->contactService = new ContactService(new Contact());
+        $this->contactService = app(ContactService::class);
     }
 
     /**
@@ -104,5 +104,26 @@ class ContactServiceTest extends TestCase
 
         // Act
         $this->contactService->update(['name' => 'John Doe'], $nonExistentContactId);
+    }
+
+    public function test_it_can_delete_contact()
+    {
+        // Arrange
+        $contact = Contact::factory()->create();
+
+        // Act
+        $this->contactService->delete($contact->id);
+
+        // Assert
+        $this->assertSoftDeleted($contact);
+    }
+
+    public function test_it_can_delete_throws_exception_when_contact_not_found()
+    {
+        // Expect
+        $this->expectException(ModelNotFoundException::class);
+
+        // Act
+        $this->contactService->delete(9999); // ID que não existe no banco de dados
     }
 }

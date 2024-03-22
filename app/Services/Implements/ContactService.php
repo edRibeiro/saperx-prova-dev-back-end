@@ -50,5 +50,10 @@ class ContactService implements ContactServiceInterface
 
   public function delete(int $contactId): void
   {
+    $contact = $this->model->find($contactId);
+    if (!$contact) {
+      throw new ModelNotFoundException();
+    }
+    $contact->delete();
   }
 }
