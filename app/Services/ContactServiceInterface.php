@@ -3,10 +3,11 @@
 namespace App\Services;
 
 use App\Models\Contact;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 interface ContactServiceInterface
 {
-  public function findAll(): array;
+  public function findAll(): LengthAwarePaginator;
   public function findById(int $contactId): Contact;
   public function store(array $data): Contact;
   public function update(array $data, int $contactId): Contact;

@@ -5,6 +5,7 @@ namespace App\Services\Implements;
 use App\Models\Contact;
 use App\Services\ContactServiceInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -17,14 +18,14 @@ class ContactService implements ContactServiceInterface
     $this->model = $model;
   }
 
-  public function findAll(): array
+  public function findAll(): LengthAwarePaginator
   {
-    return [];
+    return $this->model->with('phones')->paginate(15);
   }
 
   public function findById(int $contactId): Contact
   {
-    return new Contact();
+    return $this->model->findOrFail($contactId);
   }
 
   public function store(array $data): Contact
