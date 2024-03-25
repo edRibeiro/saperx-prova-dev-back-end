@@ -7,7 +7,8 @@ use App\Services\ContactServiceInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Support\Collection;
+
 
 class ContactService implements ContactServiceInterface
 {
@@ -21,6 +22,11 @@ class ContactService implements ContactServiceInterface
   public function findAll(): LengthAwarePaginator
   {
     return $this->model->with('phones')->paginate(15);
+  }
+
+  public function findAllRaw(): Collection
+  {
+    return $this->model->with('phones')->get();
   }
 
   public function findById(int $contactId): Contact
