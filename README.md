@@ -51,12 +51,25 @@ docker run --rm \
 
 ```./vendor/bin/sail artisan migrate```
 
-6. Popule o banco de dados com os produtos de celular:
+6. Popule o banco de dados com contatos:
 
-```./vendor/bin/sail artisan db:seed --class=ProductSeeder```
+```./vendor/bin/sail artisan db:seed --class=ContactSeeder```
+
+7. Instale as dependências do front-end para visualizar o relatório:
+
+``` sail npm install ```
+
+8. Inicie o a aplicação node.
+
+``` sail npm run dev ```
+
+9. Acesse a URL http://localhost/contacts
+
+![Lista de contatos](https://i.imgur.com/RLWeMML.jpeg)
 
 ###### Uso
 - Acesse a documentação da API em http://localhost/api/documentation para obter detalhes sobre os endpoints disponíveis, parâmetros necessários e exemplos de solicitações e respostas.
+![Documentação da API](https://i.imgur.com/CzMISZr.jpeg)
 - Importe a coleção para o Postman disponível no arquivo ```collections.yml``` do projeto para explorar os endpoints da API de forma interativa.
 
 ###### Contribuição
